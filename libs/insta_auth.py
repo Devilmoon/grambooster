@@ -15,6 +15,7 @@ def get_api(username, password, settings_file_path="saved_auth.json"):
         print("fresh login..")
         api = fresh_login(username, password)
         store_auth(api.settings)
+    print("api acquired!")
     return api
 
 def load_auth(cached_file):
