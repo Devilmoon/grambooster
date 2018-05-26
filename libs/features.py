@@ -25,9 +25,8 @@ def get_my_feed(api, username, cache):
     try:
         with open(cache, "w+") as c:
             history = json.loads(c.read)
-        print(history)
+        print("history: ", history)
     except:
-        open(cache, "x")
         pass
     own = api.self_feed()
     for i in range(len(own["items"])):
