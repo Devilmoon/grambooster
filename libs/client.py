@@ -32,7 +32,7 @@ class TCPclient(asyncio.Protocol):
 
     def data_received(self, data):
         print('Message received: {!r}'.format(data.decode()))
-        process_data(self.api, data.decode(), self.username)
+        process_data(self.api, data.decode(), self.username, self.cache_path)
 
     @asyncio.coroutine
     def _send_data(self):
