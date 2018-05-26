@@ -24,7 +24,7 @@ seenMine=['']
 def get_my_feed(api, username, cache):
     try:
         with open(cache, "w+") as c:
-            history = json.loads(c.read)
+            history = json.loads(c.read())
         print("history: ", history)
     except:
         pass
