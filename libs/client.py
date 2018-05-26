@@ -13,6 +13,7 @@ class TCPclient(asyncio.Protocol):
         self.username = username
         self.password = password
         self.settings_file_path = "saved_auth.json"
+        self.cache_path = "cache/cached.json"
         self.api = None
         asyncio.async(self._send_data())  # Or asyncio.ensure_future if using 3.4.3+
 
@@ -31,7 +32,7 @@ class TCPclient(asyncio.Protocol):
 
     def data_received(self, data):
         print('Message received: {!r}'.format(data.decode()))
-        process_data(self.api, data.decode())
+        process_data(self.api, data.decode(), self.username)
 
     @asyncio.coroutine
     def _send_data(self):
@@ -39,8 +40,9 @@ class TCPclient(asyncio.Protocol):
         yield from self._ready.wait()
         print("Ready!")
         while True:
-            pics = get_my_feed(self.api, self.username)
+            pics = get_my_feed(self.api, self.username, self.cache_path)
             if pics != None:
                 self.transport.write(pics.encode('utf8'))
                 print('Message sent: {!r}'.format(pics))
-            yield from asyncio.sleep(10)
+            #5 min
+            yield from asyncio.sleep(300)

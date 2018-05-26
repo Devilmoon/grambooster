@@ -4,18 +4,31 @@ def like_picture(api, media_id):
     res = api.post_like(media_id, 'photo_view')
     return res
 
-def process_data(api, data):
+def process_data(api, data, username):
     data = json.loads(data)
     pics = data.get("pics", "")
     if not pics:
         print("no pics received:", data)
         return
-    print("i'm going to like this pic:", pics[0])
-    res = like_picture(api, pics[0])
-    print("result:", res)
+    who = data.get("who", "")
+    if who!= username:
+        print("i'm going to like this pic:", pics[0])
+        res = like_picture(api, pics[0])
+        print("result:", res)
+        return
+    else:
+        print("That's my pic! Not liking it")
+        return
 
 seenMine=['']
-def get_my_feed(api, username):
+def get_my_feed(api, username, cache):
+    try:
+        with open(cache, "w+") as c:
+            history = json.loads(c.read)
+        print(history)
+    except:
+        open(cache, "x")
+        pass
     own = api.self_feed()
     for i in range(len(own["items"])):
         id_pic = own["items"][i]["id"].split("_")[0]
